@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 int minL = 10E8;
-vector<int> resp;
+vector<int> V;
 // Acha o valor do corte máximo. Retorna o corte máximo e a largura de corte de uma dada ordem
 pair<int,int> cutValue(const vector<pair<int, int> > &edge,const vector<int> &f, int numVertices){
 	
@@ -11,12 +11,17 @@ pair<int,int> cutValue(const vector<pair<int, int> > &edge,const vector<int> &f,
 	
     // Identificando cortes
   	for(int i=0;i<edge.size();i++){
+          int a = min(edge[i].first, edge[i].second);
+		  int b = max(edge[i].first, edge[i].second);
 	    for(int j=0;j<numVertices;j++){
             
-		    int a = min(edge[i].first, edge[i].second);
-			int b = max(edge[i].first, edge[i].second);
-            
             //Condicao para calculo da largura do corte, especificada no artigo.
+            cout << "Vejamos se fa[" << a << "] e <= que fj[" << j << "] " << (f[a]<=f[j]) << endl;
+            cout << "Vejamos se fj[" << j << "] e < que f[" << b << "] " << (f[j] < f[b]) << endl;
+            cout <<"f[a]" << f[a] << endl;
+            cout << "f[b]" << f[b] << endl;
+            cout << "f[j]" << f[j] << endl;
+
 			if(f[a]<=f[j] && f[j]<f[b]){ 
                 ++cutwidth[j];
                 ++cutwidthSum;
@@ -27,7 +32,7 @@ pair<int,int> cutValue(const vector<pair<int, int> > &edge,const vector<int> &f,
   for(int i=0; i<cutwidth.size(); i++) maxCut = cutwidth[i]>maxCut?cutwidth[i]:maxCut;
 
         cout << "{ ";
-        for(int i=0; i<numVertices; i++) cout << f[i] << ",";
+        for(int i: f) cout << i << ",";
         cout << "} com maxCut: " << maxCut << "  ";
 
         cout << "[";
@@ -63,22 +68,6 @@ vector<int> localSearch(const vector<pair<int,int> > &edge, vector<int> &f, int 
         int newCut = newResults.first; //Captura o novo corte minimo
         int newSum = newResults.second; //Captura o somatorio dos cortes
         
-
-          if(newCut<minL) {
-            minL = newCut;
-            resp = newConfig;
-        }
-
-       // if(newCut<currCut){
-         // return newConfig; //Copiando o novo vetor. OTIMIZAVEL. Daria pra trocar so os dois swapados
-       // }
-        //if(newSum < currSum) {
-          //leastCutSum = newConfig;
-          //currSum = newSum;
-        //}
-    //for}
-  
-  	//Zona de empate
    return newConfig;
 }
 
@@ -115,7 +104,7 @@ int main(){
 	vector<int> f(numVertices,1);
 	for(int i=0;i<numVertices;i++) f[i]=i+1; //Iniciando vetor da forma {1,2,3,...,n}
 
-	int trocas = 10;
+	int trocas = 1;
 	while(trocas--){
 			
       f=localSearch(edge,f,numVertices);
@@ -123,5 +112,9 @@ int main(){
 
 	}
 
-    cout<<cutValue(edge,f,numVertices).first<<endl;
+
+   /* cout << "Resposta" << endl;
+    for(int i=0; i<numVertices; i++) cout << f[i] << ",";
+    cout << endl;
+    cout<<cutValue(edge,f,numVertices).first<<endl;*/
 }
