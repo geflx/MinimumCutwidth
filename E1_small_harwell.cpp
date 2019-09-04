@@ -43,7 +43,7 @@ vector < int > localSearch(const vector <pair<int,int> > &edge, vector <int>&f, 
     return newCut < currCut ? newConfig : f;
 }
 
-vector < pair < int, int > > readGraph(int numVertices, int numArestas) {
+vector <pair<int,int> > readGraph(int numVertices, int numArestas) {
 
     vector < pair < int, int > > edge(numArestas);
     int temp1, temp2;
@@ -70,7 +70,7 @@ int main() {
     cin >> numVertices >> numVertices; //2a linha: extra + numVertices (ou vice-versa pois esta repetido
     cin >> numArestas;
 
-    vector < pair < int, int > > edge = readGraph(numVertices, numArestas);
+    vector <pair <int,int> > edge = readGraph(numVertices, numArestas);
 
     //Declaracao do vetor f (1,2,...n) -> especificado no artigo
     vector < int > f(numVertices, 1);
