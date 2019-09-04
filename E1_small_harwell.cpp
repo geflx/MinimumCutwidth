@@ -22,13 +22,12 @@ int cutValue(const vector <pair<int,int> > &edge,
     }
 
     for (int i = 0; i < cutwidth.size(); i++) maxCut = cutwidth[i] > maxCut ? cutwidth[i] : maxCut;
-    return make_pair(maxCut, cutwidthSum);
+    return maxCut;
 }
 
 vector < int > localSearch(const vector <pair<int,int> > &edge, vector <int>&f, int numVertices) {
 
-    int currSolution = cutValue(edge, f, numVertices);
-    int currCut = currSolution.first;
+    int currCut = cutValue(edge, f, numVertices);
     vector < int > newConfig = f;
 
     int a, b;
@@ -76,7 +75,7 @@ int main() {
     vector < int > f(numVertices, 1);
     for (int i = 0; i < numVertices; i++) f[i] = i + 1; //Iniciando vetor da forma {1,2,3,...,n}
 
-    int trocas = 1000;
+    int trocas = 10000000;
     while (trocas--) {
 
         f = localSearch(edge, f, numVertices);
@@ -86,5 +85,5 @@ int main() {
     //cout << "{ ";
     //for(int i:f) cout << i << ",";
     //cout << "}" << endl;
-    cout << cutValue(edge, f, numVertices).first << endl;
+    cout << cutValue(edge, f, numVertices) << endl;
 }
