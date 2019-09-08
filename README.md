@@ -1,6 +1,6 @@
-# Trabalho 1 Metaheurísticas - Tópicos Especiais II (INF 492) da UFV.
+# T1 Metaheurísticas - INF 492
 
-Andamento do trabalho
+Andamento do trabalho:
 
 Etapa 0: Concluída.
 
