@@ -1,4 +1,4 @@
-# Trabalho 1 Metaheuísticas - Tópicos Especiais II (INF 492) da UFV.
+# Trabalho 1 Metaheurísticas - Tópicos Especiais II (INF 492) da UFV.
 
 Andamento do trabalho
 
