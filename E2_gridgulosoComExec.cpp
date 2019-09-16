@@ -41,6 +41,8 @@ vector <int> nextNeighbor(const vector <pair<int,int> > &edge, vector <int>&f, i
         randomHistory[a] = true;
         while(randomHistory[b]) b = rand() % (numVertices-1);
         randomHistory[b] = true;
+        //while(a==b || randomHistory[a]) a = rand() % (numVertices-1);
+        //while(b==a || randomHistory[b]) b = rand() % (numVertices-1);
         
         randomHistory[a] = true;
         randomHistory[b] = true;
@@ -86,12 +88,10 @@ vector<int> initialGreedy(int numVertices, const vector<pair<int,int> > &edge, v
     return novaConfig;
 }
 
-
 vector<pair<int,int>> readGrid(int &numColunas){
   vector<pair<int,int> > edge;
   string line;
   int contadorLinha=0;
-  numColunas=0;
   while(getline(cin,line)){
     if(contadorLinha==0){
       numColunas=line.size()/2;
@@ -115,9 +115,7 @@ vector<pair<int,int>> readGrid(int &numColunas){
   return edge;
 }
 
-
 int main() {
-
     srand(time(NULL));
     string line;
     getline(cin, line); //Ignorar a primeira linha. Nome do problema.
@@ -131,6 +129,28 @@ int main() {
     vector<int> iniConfig;
 
     iniConfig=initialGreedy(numVertices,edge,f);
-    cout << cutValue(edge, iniConfig, numVertices) << endl;
+    // cout << cutValue(edge, iniConfig, numVertices) << endl;
 
+    // //Declaracao do vetor f (1,2,...n) -> especificado no artigo
+
+    int trocas = 1000000;
+    int trocasInicial= trocas;
+    int currCutValue=cutValue(edge,iniConfig,numVertices);
+
+    int naoMelhora=0;
+    while (trocas--){
+        if(naoMelhora>ceil(0.1*trocasInicial)){
+            break;
+        }
+        vector<int> tempConfig= nextNeighbor(edge, iniConfig, numVertices);
+        int neighborCutValue=cutValue(edge,tempConfig,numVertices);
+        if(neighborCutValue<currCutValue){
+            iniConfig=tempConfig;
+            currCutValue=neighborCutValue;
+            naoMelhora=0;
+        }else{
+            ++naoMelhora;
+        }
+    }
+    cout << cutValue(edge, iniConfig,numVertices) << endl;
 }
