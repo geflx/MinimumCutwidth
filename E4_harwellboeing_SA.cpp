@@ -134,26 +134,26 @@ void simulatedAnnealing(const vector <pair<int, int> > &edge, vector<int> &f, in
 			int delta = currSol - currBest;
 			
 		    if(currSol < globalOptimum.first) {
-                globalOptimum.first = currSol;
-                globalOptimum.second = s;
+			globalOptimum.first = currSol;
+			globalOptimum.second = s;
 		    }
 
 		    if(delta <= 0) {
-                changes++;
-                currBest = currSol;
-                f = s;
+			changes++;
+			currBest = currSol;
+			f = s;
 		    } else {
 		
-                double e = 1.0/exp(delta/T);
-                double R = (rand()%100 + 1)/100.0;
-                
-                // Accepts a bad move with a given probability
-                if(e>R)	{
-                    changes++;
-                    currBest = currSol;
-                    f = s; 
-                }
-            }		
+			double e = 1.0/exp(delta/T);
+			double R = (rand()%100 + 1)/100.0;
+
+			// Accepts a bad move with a given probability
+			if(e>R)	{
+			    changes++;
+			    currBest = currSol;
+			    f = s; 
+			}
+		    }		
 		} // Internal Loop
 
         // Cooling schedule
