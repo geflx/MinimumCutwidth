@@ -118,7 +118,7 @@ void simulatedAnnealing(const vector <pair<int, int> > &edge, vector<int> &f, in
 	vector <int> s = f;
 	double T = numVertices;
 	double Tmin = 0.001;
-    int maxTrials = 1000;
+    int maxTrials = 10000;
     //int maxTrials = numVertices*numVertices;
 	//int maxTrials = numVertices; big samples
     int currBest = cutValue(edge,f,numVertices);
