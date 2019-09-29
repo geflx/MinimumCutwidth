@@ -128,8 +128,8 @@ vector<int> auxGraspGreedy(int numVertices, const vector<vector<int> > &adjList,
 
     vector<int> rcl=rclOriginal;
     vector<bool> visited(numVertices,false);
-    while(alreadyFixed<numVertices){
-        if(lowerMiddle<0 && upperMiddle>=numVertices){
+    while(alreadyFixed<numVertices){  //Inserir todos os vertices na solucao.
+        if(lowerMiddle<0 && upperMiddle>=numVertices){ //Imperir acesso de posicao invalida.
             break;
         }
         //A cada iteracao um vertice aleatorio e' inserido
@@ -150,7 +150,7 @@ vector<int> auxGraspGreedy(int numVertices, const vector<vector<int> > &adjList,
         else
             lowerMiddle--;
 
-        bool clock=false;
+        bool clock=false; //Variavel para indicar se e' para inserir na esquerda (false) ou direita (true)
         //Atualizando a lista RCL para valorizar vertices adjacentes ao inserido
         for(int i:adjList[whoInsert]){
             rcl[i]+=2;
@@ -158,7 +158,7 @@ vector<int> auxGraspGreedy(int numVertices, const vector<vector<int> > &adjList,
         for(int i=0;i<adjList[whoInsert].size();i++){
             int max=-1;
             for(int j=0;j<numVertices;j++){
-                if(!visited[j] && rcl[j]>=max){
+                if(!visited[j] && rcl[j]>=max){ //Escolhendo o vertice de maior valor da RCL List
                     max=j;
                 }
             }
@@ -169,7 +169,7 @@ vector<int> auxGraspGreedy(int numVertices, const vector<vector<int> > &adjList,
             if(!visited[nowInsert]){
                 visited[nowInsert]=true;
                 alreadyFixed++;
-                if(!clock){ //Inserir na direita: clock=false
+                if(!clock){ //Inserir na esquerda: clock=false
                     if(lowerMiddle>=0){
                         greedyRandom[nowInsert]=lowerMiddle+1;
                         lowerMiddle--;
@@ -191,7 +191,7 @@ vector<int> auxGraspGreedy(int numVertices, const vector<vector<int> > &adjList,
             }
         }
     }
-    return greedyRandom;
+    return greedyRandom; //retorna solucao.
 }
 
 vector<int> GraspGreedy(int numVertices,vector<int> &iniSolution, int iniCutValue, const vector<pair<int,int> > &edge, int itnumber,int randomParameter){
@@ -217,7 +217,7 @@ vector<int> GraspGreedy(int numVertices,vector<int> &iniSolution, int iniCutValu
     }
     sort(edgesOnIt.begin(),edgesOnIt.end(),greater<pair<int,int> >());;
 
-    //Aumentando 1 no peso dos 40 por cento vertices com mais arestas em RCL.
+    //Aumentando 1 no peso dos 40 por cento vertices com mais arestas na RCL.
     for(int i=0;i<=0.5*numVertices;i++){
         rcl[i]+=2;
     }
@@ -229,18 +229,18 @@ vector<int> GraspGreedy(int numVertices,vector<int> &iniSolution, int iniCutValu
     int currCutValue;
     vector<int> currSolution;
 
-    currSolution=auxGraspGreedy(numVertices,adjList,rcl,randomParameter);
+    currSolution=auxGraspGreedy(numVertices,adjList,rcl,randomParameter); //Criando uma solucao para comparar com a inicial
     currCutValue=cutValue(edge,currSolution,numVertices);
-    if(bestCutValue>=currCutValue){
+    if(bestCutValue>=currCutValue){ //Atualizando os melhores resultados
         bestConfig=currSolution;
         bestCutValue=currCutValue;
     }
-    while(itnumber--){
-        int trocas = 1000;
+    while(itnumber--){ //Busca local em cima da solucao obtida.
+        int trocas = 10000;
         int trocasInicial= trocas;
         int naoMelhora=0;
         while (trocas--){
-            if(naoMelhora> ceil(0.1*trocasInicial)){
+            if(naoMelhora> ceil(0.1*trocasInicial)){  //A busca local devera' terminar caso nao melhore em 1000 iteracoes seguidas.
                 break;
             }
             vector<int> tempConfig= nextNeighbor(edge, currSolution, numVertices);
@@ -248,20 +248,20 @@ vector<int> GraspGreedy(int numVertices,vector<int> &iniSolution, int iniCutValu
             if(neighborCutValue<=currCutValue){
                 currSolution=tempConfig;
                 currCutValue=neighborCutValue;
-                naoMelhora=0; //Melhorou! Reset.
+                naoMelhora=0; 
             }else{
                 ++naoMelhora;
             }
-        }
-        if(currCutValue<bestCutValue){
+        } 
+        if(currCutValue<bestCutValue){ //Atualizando os melhores resultados gerais.
             bestConfig=currSolution;
             bestCutValue=currCutValue;
         }
-        currSolution=auxGraspGreedy(numVertices,adjList,rcl,randomParameter);
+        currSolution=auxGraspGreedy(numVertices,adjList,rcl,randomParameter); //Gerando nova solucao
         currCutValue=cutValue(edge,currSolution,numVertices);
     }    
 
-    return bestConfig;
+    return bestConfig; //Retorna melhor configuracao.
 }
 
 
@@ -340,8 +340,8 @@ int main() {
 	    int trocasInicial= trocas;
 	    int naoMelhora=0;
 		int currCutValue=cutValue(edge,f,numVertices);
-	    while (trocas--){
-	        if(naoMelhora> ceil(0.1*trocasInicial)){ //A busca local devera' terminar
+	    while (trocas--){ //Busca local em cima da solucao inicial.
+	        if(naoMelhora> ceil(0.1*trocasInicial)){ //A busca local devera' terminar caso nao melhore em 1000 iteracoes seguidas.
 	            break;
 	        }
 	    	vector<int> tempConfig= nextNeighbor(edge, f, numVertices);
@@ -349,16 +349,16 @@ int main() {
 	    	if(neighborCutValue<currCutValue){
 	    		f=tempConfig;
 	    		currCutValue=neighborCutValue;
-	            naoMelhora=0; //Melhorou! Reset.
+	            naoMelhora=0; 
 	    	}else{
 	            ++naoMelhora;
 	        }
 	    }
-	    vector<int> grasp=GraspGreedy(numVertices,f,currCutValue,edge,2000,4); //de 500 (testes feitos) pra 2000
+	    vector<int> grasp=GraspGreedy(numVertices,f,currCutValue,edge,5000,4); //Realizando o GRASP nbiter=5000 vezes.
         cout<<"Configuração obtida: ";
         for(int i=0;i<grasp.size();i++){
             cout<<grasp[i]<<" ";
         }cout<<endl;
-	    cout<<cutValue(edge,grasp,numVertices)<<endl;
+	    cout<<cutValue(edge,grasp,numVertices)<<endl; //Resultado.
     }
 }
