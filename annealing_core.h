@@ -1,5 +1,5 @@
-#ifndef CORE_H
-#define CORE_H
+#ifndef ANNEALING_CORE_H
+#define ANNEALING_CORE_H
 
 // Containers & Data types
 #include <string>

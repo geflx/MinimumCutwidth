@@ -1,4 +1,4 @@
-#include "core.h"
+#include "annealing_core.h"
 
 int main() {
 
