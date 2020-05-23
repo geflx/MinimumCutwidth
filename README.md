@@ -7,7 +7,7 @@ Note in the example below that we have a lot of outgoing edges from **1** and th
 <p align="center">
 <img src="https://raw.githubusercontent.com/lucas-t-reis/MinimumCutwidth/master/assets/initial-placement.svg">
 </p>
-One possible solution, and in that case the optimal, is to position the most influential node in the middle and group nodes with one edge between them, as seen below:
+One possible solution with a max cutwitdh of 2, and in that case the optimal, is to position the most influential node in the middle and group nodes with one edge between them, as seen below:
 <p align="center">
 <img src="https://raw.githubusercontent.com/lucas-t-reis/MinimumCutwidth/master/assets/final-placement.svg">
 </p>
