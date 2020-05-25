@@ -1,3 +1,8 @@
+# Compiling & Running
+```bash
+$ g++ heuristics_name.cpp -O3 -fopenmp -o heurisitics_name.out
+$ heuristics_name.out < path/to/instance
+```
 # Cutwidth Minimization Problem (CMP)
 
 The CMP is a NP-Hard problem<sup>1</sup> that consists on finding a linear setup of vertices of a given graph in such a way that we minimize the maximum cutwidth in it. A **cutwidth** is defined as the amount of points intercepted by a imaginary *vertical* line crossing edges between each node in the graph.  An analogy for the problem is trying to have the least amount of wires as possible between eletronic components - in a device that has a linear arrangement of its internal components, meaning only 1 dimension is considered here.
