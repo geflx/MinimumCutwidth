@@ -13,9 +13,15 @@
 #include <iostream>
 #include <random>
 
+//Simulated Annealing defines
 #define SA_MAX_TRIALS 10000
 #define SA_ITERATIONS 10
 #define EPSILON 1E-12
+
+//Grasp heuristic defines
+#define INITIAL_GREEDY_TRIES 10000
+#define GRASP_ITERATIONS 5000
+#define RANDOM_ALPHA 4
 
 std::pair<int,std::vector<int> > globalOptimum;
 
