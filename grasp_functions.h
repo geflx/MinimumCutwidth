@@ -21,7 +21,7 @@ std::vector<int> nextNeighbor(const std::vector <std::pair<int,int> > &edge, std
         randomHistory[a] = true;
         randomHistory[b] = true;
         
-        swap(newConfig[a], newConfig[b]);
+        std::swap(newConfig[a], newConfig[b]);
     }
 
     return newConfig;
@@ -148,7 +148,7 @@ std::vector<int> GRASP(int nodes,std::vector<int> &iniSolution, int iniCutValue,
         edgesOnIt[ edge[i].first ].first++;
         edgesOnIt[ edge[i].second ].first++;
     }
-    sort(edgesOnIt.begin(), edgesOnIt.end(), greater<std::pair<int,int> >());;
+    sort(edgesOnIt.begin(), edgesOnIt.end(), std::greater<std::pair<int,int> >());;
 
     //Aumentando 1 no peso dos 40 por cento vertices com mais arestas na RCL.
     for(int i = 0; i<= 0.5 * nodes; i++)
@@ -230,12 +230,12 @@ std::pair<std::vector<int>, int> initialSolution(int tries, int nodes, std::vect
 
 void printSolution(int nodes, const std::vector<int> &S, const std::vector<std::pair<int, int>> &edge){
 
-    cout<<"Solution: ";
+    std::cout<<"Solution: ";
 
     for(int i=0; i < S.size(); i++)
-        cout << S[i] << " ";
+        std::cout << S[i] << " ";
     
-    cout << "\n" << "Obj F. Value: " << cutValue(edge, S, nodes) << "\n";
+    std::cout << "\n" << "Obj F. Value: " << cutValue(edge, S, nodes) << "\n";
 }
 
 #endif
