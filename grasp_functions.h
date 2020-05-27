@@ -1,20 +1,12 @@
 #ifndef GRASP_FUNCTIONS_H
 #define GRASP_FUNCTIONS_H
 
-using namespace std;
+std::vector<int> nextNeighbor(const std::vector <std::pair<int,int> > &edge, std::vector <int>&f, int nodes) {
 
-//Grasp heuristic defines
-#define INITIAL_GREEDY_TRIES 10000
-#define GRASP_ITERATIONS 5000
-#define RANDOM_ALPHA 4
-
-
-vector<int> nextNeighbor(const vector <pair<int,int> > &edge, vector <int>&f, int nodes) {
-
-    vector <int> newConfig = f;
+    std::vector <int> newConfig = f;
 
     int neighborhoodSize = (int) ceil(0.1*nodes);
-    vector<bool> randomHistory(nodes,false);
+    std::vector<bool> randomHistory(nodes,false);
 
     for(int i=0; i<neighborhoodSize/2; i++){
         
@@ -29,21 +21,21 @@ vector<int> nextNeighbor(const vector <pair<int,int> > &edge, vector <int>&f, in
         randomHistory[a] = true;
         randomHistory[b] = true;
         
-        swap(newConfig[a], newConfig[b]);
+        std::swap(newConfig[a], newConfig[b]);
     }
 
     return newConfig;
 }
 
-vector<int> auxiliarFunction(int nodes, const vector<vector<int>> &adjList, const vector<int> &rclOriginal, int randomParameter){
+std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>> &adjList, const std::vector<int> &rclOriginal, int randomParameter){
 
-    vector<int> greedyRandom(nodes,-1);
+    std::vector<int> greedyRandom(nodes,-1);
     int upperMiddle = nodes/2;
     int lowerMiddle = (nodes/2)-1 >= 0 ? (nodes/2 - 1) : -1;
     int insertedNodes = 0;
 
-    vector<int> rcl = rclOriginal;
-    vector<bool> visited (nodes, false);
+    std::vector<int> rcl = rclOriginal;
+    std::vector<bool> visited (nodes, false);
 
     while(insertedNodes < nodes){  //Inserir todos os vertices na solucao.
 
@@ -132,12 +124,12 @@ vector<int> auxiliarFunction(int nodes, const vector<vector<int>> &adjList, cons
     return greedyRandom; //retorna solucao.
 }
 
-vector<int> GRASP(int nodes,vector<int> &iniSolution, int iniCutValue, const vector<pair<int,int> > &edge, int itnumber, int randomParameter){
+std::vector<int> GRASP(int nodes,std::vector<int> &iniSolution, int iniCutValue, const std::vector<std::pair<int,int> > &edge, int itnumber, int randomParameter){
    
-    vector<vector<int>> adjList(nodes);
-    vector<pair<int,int>> edgesOnIt(nodes);
+    std::vector<std::vector<int>> adjList(nodes);
+    std::vector<std::pair<int,int>> edgesOnIt(nodes);
 
-    vector<int> rcl(nodes, 0); //Restricted candidate list
+    std::vector<int> rcl(nodes, 0); //Restricted candidate list
 
     //Criando a lista de adjacencia
     for(int i=0; i< edge.size(); i++){
@@ -146,7 +138,7 @@ vector<int> GRASP(int nodes,vector<int> &iniSolution, int iniCutValue, const vec
         adjList[ edge[i].second ].push_back( edge[i].first );
 
     }
-    //Inicializando vector de structs que serao usados
+    //Inicializando std::vector de structs que serao usados
     for(int i = 0;i < nodes; i++){
         edgesOnIt[i].second = i;
         edgesOnIt[i].first = 0; //Numero de arestas adjacentes
@@ -156,7 +148,7 @@ vector<int> GRASP(int nodes,vector<int> &iniSolution, int iniCutValue, const vec
         edgesOnIt[ edge[i].first ].first++;
         edgesOnIt[ edge[i].second ].first++;
     }
-    sort(edgesOnIt.begin(), edgesOnIt.end(), greater<pair<int,int> >());;
+    sort(edgesOnIt.begin(), edgesOnIt.end(), std::greater<std::pair<int,int> >());;
 
     //Aumentando 1 no peso dos 40 por cento vertices com mais arestas na RCL.
     for(int i = 0; i<= 0.5 * nodes; i++)
@@ -164,10 +156,10 @@ vector<int> GRASP(int nodes,vector<int> &iniSolution, int iniCutValue, const vec
     
     //Otimos gerais
     int bestCutValue = iniCutValue;
-    vector<int> bestConfig = iniSolution;
+    std::vector<int> bestConfig = iniSolution;
 
     int currCutValue;
-    vector<int> currSolution;
+    std::vector<int> currSolution;
 
     currSolution = auxiliarFunction(nodes, adjList, rcl, randomParameter); //Criando uma solucao para comparar com a inicial
     currCutValue = cutValue(edge, currSolution, nodes);
@@ -187,7 +179,7 @@ vector<int> GRASP(int nodes,vector<int> &iniSolution, int iniCutValue, const vec
             if(stuck > ceil(0.1 * trocasInicial)){  //A busca local devera' terminar caso nao melhore em 1000 iteracoes seguidas.
                 break;
             }
-            vector<int> tempConfig = nextNeighbor(edge, currSolution, nodes);
+            std::vector<int> tempConfig = nextNeighbor(edge, currSolution, nodes);
             int neighborCutValue = cutValue(edge, tempConfig, nodes);
             if(neighborCutValue <= currCutValue){
                 currSolution = tempConfig;
@@ -208,7 +200,7 @@ vector<int> GRASP(int nodes,vector<int> &iniSolution, int iniCutValue, const vec
     return bestConfig; //Retorna melhor configuracao.
 }
 
-pair<vector<int>, int> initialSolution(int tries, int nodes, vector<int> &f, const vector<pair<int, int>> &edge){
+std::pair<std::vector<int>, int> initialSolution(int tries, int nodes, std::vector<int> &f, const std::vector<std::pair<int, int>> &edge){
     
     int totalTries = tries;
     int stuck = 0;
@@ -220,7 +212,7 @@ pair<vector<int>, int> initialSolution(int tries, int nodes, vector<int> &f, con
             break;
         }
 
-        vector<int> ngbor = nextNeighbor(edge, f, nodes);
+        std::vector<int> ngbor = nextNeighbor(edge, f, nodes);
         int ngbor_obj = cutValue(edge,ngbor,nodes);
 
         if(ngbor_obj < obj){
@@ -236,14 +228,14 @@ pair<vector<int>, int> initialSolution(int tries, int nodes, vector<int> &f, con
     return {f, obj};
 }
 
-void printSolution(int nodes, const vector<int> &S, const vector<pair<int, int>> &edge){
+void printSolution(int nodes, const std::vector<int> &S, const std::vector<std::pair<int, int>> &edge){
 
-    cout<<"Solution: ";
+    std::cout<<"Solution: ";
 
     for(int i=0; i < S.size(); i++)
-        cout << S[i] << " ";
+        std::cout << S[i] << " ";
     
-    cout << "\n" << "Obj F. Value: " << cutValue(edge, S, nodes) << "\n";
+    std::cout << "\n" << "Obj F. Value: " << cutValue(edge, S, nodes) << "\n";
 }
 
 #endif
