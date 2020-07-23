@@ -153,12 +153,14 @@ std::vector<std::pair<int,int> > readGraph(int &nodes, int &edges, std::vector<i
 
 void readInput(std::vector<std::pair<int,int> > &edge, std::vector<int> &f, int &nodes, int &edges) {
 
+    std::cout << "Input file: "; 
     std::string line;
     std::getline(std::cin, line);
 
     // Non-grid instances - Harwell and small
     if(line.find("Grid") == std::string::npos) {
-    
+        
+        std::cout << "Input nodes, nodes (again) and edges: "; 
         // Reading the number of vertices (it's repeated on the file)
         std::cin >> nodes >> nodes >> edges; 
         
@@ -183,7 +185,6 @@ void readInput(std::vector<std::pair<int,int> > &edge, std::vector<int> &f, int 
         int initialCost = cutValue(edge, f, nodes);
 
         if( greedyCost < initialCost ) f = greedy;
-
     }
 
 }

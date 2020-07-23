@@ -37,12 +37,14 @@ std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>>
     std::vector<int> rcl = rclOriginal;
     std::vector<bool> visited (nodes, false);
 
-    while(insertedNodes < nodes){  //Inserir todos os vertices na solucao.
+    while(insertedNodes < nodes){  
 
-        if(lowerMiddle < 0 && upperMiddle >= nodes){ //Imperir acesso de posicao invalida.
+        // Forbide wrong position access.
+        if(lowerMiddle < 0 && upperMiddle >= nodes){ 
             break;
         }
-        //A cada iteracao um vertice aleatorio e' inserido
+
+        // Inserting an aleatory node at each iteration.
         int chosenNode = rand()%nodes;
 
         while( visited[chosenNode] )
@@ -51,7 +53,8 @@ std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>>
         visited[chosenNode] = true;
         insertedNodes++;
 
-        if(upperMiddle < nodes) //Escolhendo posicao para inserir (esquerda ou direita)
+        // Choose Left or Right position to insert node.
+        if(upperMiddle < nodes) 
             greedyRandom[chosenNode] = upperMiddle + 1;
         else
             greedyRandom[chosenNode] = lowerMiddle + 1;
@@ -62,9 +65,10 @@ std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>>
         else
             lowerMiddle--;
 
-        bool clock = false; //Variavel para indicar se e' para inserir na esquerda (false) ou direita (true)
+        // Indicates which position insert into (Left - false/Right - true).
+        bool clock = false; 
         
-        //Atualizando a lista RCL para valorizar vertices adjacentes ao inserido
+        // Refreshing RCL List to valorize adjacent nodes of previously inserted one.
         for(int i: adjList[chosenNode])
             rcl[i] += 2;
         
@@ -73,14 +77,13 @@ std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>>
             int maxi =- 1;
 
             for(int j=0; j < nodes; j++)
-                if(!visited[j] && rcl[j] >= maxi) //Escolhendo o vertice de maior valor da RCL List
+                if(!visited[j] && rcl[j] >= maxi) // Pick max. value node of RCL.
                     maxi = j;
                
-            
-            //Inseriremos agora o maior da candidate list
+            // Inserting max. value node.
             int bestNode = maxi;
 
-            if(insertedNodes >= nodes) //Extra Stop condition
+            if(insertedNodes >= nodes) // Extra position check up.
                 return greedyRandom;
 
             if(!visited[bestNode]){
@@ -88,14 +91,14 @@ std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>>
                 visited[bestNode] = true;
                 insertedNodes++;
 
-                if(!clock){ //Inserir na esquerda: clock=false
+                if(!clock){ // Insert node in Left position.
 
                     if(lowerMiddle >= 0){
 
                         greedyRandom[bestNode] = lowerMiddle + 1;
                         lowerMiddle--;
 
-                    }else{
+                    }else{ 
 
                         greedyRandom[bestNode] = upperMiddle + 1;
                         upperMiddle++;
@@ -103,7 +106,7 @@ std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>>
                     }
                     clock = true;
 
-                }else{//Inserir na direita: clock=true
+                }else{ // Insert ndoe in Right position.
 
                     if(upperMiddle<nodes){
 
@@ -121,7 +124,7 @@ std::vector<int> auxiliarFunction(int nodes, const std::vector<std::vector<int>>
             }
         }
     }
-    return greedyRandom; //retorna solucao.
+    return greedyRandom; // Return solution.
 }
 
 std::vector<int> GRASP(int nodes,std::vector<int> &iniSolution, int iniCutValue, const std::vector<std::pair<int,int> > &edge, int itnumber, int randomParameter){
@@ -129,19 +132,19 @@ std::vector<int> GRASP(int nodes,std::vector<int> &iniSolution, int iniCutValue,
     std::vector<std::vector<int>> adjList(nodes);
     std::vector<std::pair<int,int>> edgesOnIt(nodes);
 
-    std::vector<int> rcl(nodes, 0); //Restricted candidate list
+    std::vector<int> rcl(nodes, 0); //Restricted candidate list (RCL).
 
-    //Criando a lista de adjacencia
+    // Create ADJ List.
     for(int i=0; i< edge.size(); i++){
 
         adjList[ edge[i].first ].push_back( edge[i].second );
         adjList[ edge[i].second ].push_back( edge[i].first );
 
     }
-    //Inicializando std::vector de structs que serao usados
+    // Main variables.
     for(int i = 0;i < nodes; i++){
         edgesOnIt[i].second = i;
-        edgesOnIt[i].first = 0; //Numero de arestas adjacentes
+        edgesOnIt[i].first = 0; // Number of adjacent edges.
     }
 
     for(int i = 0;i < edge.size(); i++){
@@ -150,33 +153,33 @@ std::vector<int> GRASP(int nodes,std::vector<int> &iniSolution, int iniCutValue,
     }
     sort(edgesOnIt.begin(), edgesOnIt.end(), std::greater<std::pair<int,int> >());;
 
-    //Aumentando 1 no peso dos 40 por cento vertices com mais arestas na RCL.
+    // Sum "1" of weight in 40% nodes with most edges in RCL List.
     for(int i = 0; i<= 0.5 * nodes; i++)
         rcl[i] += 2;
     
-    //Otimos gerais
+    // Global best values/solutions.
     int bestCutValue = iniCutValue;
     std::vector<int> bestConfig = iniSolution;
 
     int currCutValue;
     std::vector<int> currSolution;
 
-    currSolution = auxiliarFunction(nodes, adjList, rcl, randomParameter); //Criando uma solucao para comparar com a inicial
+    currSolution = auxiliarFunction(nodes, adjList, rcl, randomParameter); // Local solution.
     currCutValue = cutValue(edge, currSolution, nodes);
 
-    if(bestCutValue >= currCutValue){ //Atualizando os melhores resultados
+    if(bestCutValue >= currCutValue){ // Best solution check-up.
     
         bestConfig = currSolution;
         bestCutValue = currCutValue;
 
     }
-    while(itnumber--){ //Busca local em cima da solucao obtida.
+    while(itnumber--){ // Do local search on local solution.
 
         int trocas = 10000;
         int trocasInicial  = trocas;
         int stuck = 0;
         while (trocas--){
-            if(stuck > ceil(0.1 * trocasInicial)){  //A busca local devera' terminar caso nao melhore em 1000 iteracoes seguidas.
+            if(stuck > ceil(0.1 * trocasInicial)){  // LS will stop in case of 1000 consecutive iterations without any improvement.
                 break;
             }
             std::vector<int> tempConfig = nextNeighbor(edge, currSolution, nodes);
@@ -189,15 +192,15 @@ std::vector<int> GRASP(int nodes,std::vector<int> &iniSolution, int iniCutValue,
                 ++stuck;
             }
         } 
-        if(currCutValue < bestCutValue){ //Atualizando os melhores resultados gerais.
+        if(currCutValue < bestCutValue){ // Best solution check-up.
             bestConfig = currSolution;
             bestCutValue = currCutValue;
         }
-        currSolution = auxiliarFunction(nodes, adjList, rcl, randomParameter); //Gerando nova solucao
+        currSolution = auxiliarFunction(nodes, adjList, rcl, randomParameter); // Local solution.
         currCutValue = cutValue(edge, currSolution, nodes);
     }    
 
-    return bestConfig; //Retorna melhor configuracao.
+    return bestConfig; // Return best solution.
 }
 
 std::pair<std::vector<int>, int> initialSolution(int tries, int nodes, std::vector<int> &f, const std::vector<std::pair<int, int>> &edge){
@@ -208,7 +211,7 @@ std::pair<std::vector<int>, int> initialSolution(int tries, int nodes, std::vect
 
     while (tries--){
 
-        if(stuck> ceil(0.1 * totalTries)){ //Finishes if 10% of total tries run out
+        if(stuck> ceil(0.1 * totalTries)){ // Finish if got stuck in 10 percent of tries.
             break;
         }
 
