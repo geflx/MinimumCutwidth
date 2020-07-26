@@ -33,5 +33,5 @@ The folder CMPLIB2010 contains benchmarks for the problem. They're  graphs with 
 
 ## Team :octocat:
 - Gabriel Félix
-- [Lucas Reis](https://github.com/lucas-tx-reis)
+- [Lucas Reis](https://github.com/lucas-t-reis)
 
